@@ -7,6 +7,10 @@ app.use(express.json());
 const port = process.env.PORT || 3000;
 const verifyToken = process.env.VERIFY_TOKEN;
 
+console.log(
+  'VERIFY_TOKEN:',
+  verifyToken ? 'LOADED' : 'MISSING'
+);
 app.get('/', (req, res) => {
   res.send('WhatsApp Webhook Server is running');
 });
