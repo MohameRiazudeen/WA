@@ -15,7 +15,7 @@ const verifyToken = process.env.VERIFY_TOKEN;
 app.get('/', (req, res) => {
   res.send('WhatsApp Webhook Server is running 🚀');
 });
-
+/*
 // WhatsApp webhook verification
 app.get('/webhook', (req, res) => {
   const {
@@ -31,7 +31,26 @@ app.get('/webhook', (req, res) => {
     res.status(403).end();
   }
 });
+*/
+app.get('/webhook', (req, res) => {
+  const {
+    'hub.mode': mode,
+    'hub.challenge': challenge,
+    'hub.verify_token': token
+  } = req.query;
 
+  console.log('Mode:', mode);
+  console.log('Received token:', token);
+  console.log('Environment token exists:', !!verifyToken);
+  console.log('Tokens match:', token === verifyToken);
+
+  if (mode === 'subscribe' && token === verifyToken) {
+    console.log('WEBHOOK VERIFIED');
+    res.status(200).send(challenge);
+  } else {
+    res.status(403).send('Verification failed');
+  }
+});
 // Receive WhatsApp webhook messages
 app.post('/webhook', (req, res) => {
   const timestamp = new Date()
